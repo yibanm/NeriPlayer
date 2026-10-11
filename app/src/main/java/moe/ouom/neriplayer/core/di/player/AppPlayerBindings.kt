@@ -25,9 +25,11 @@ private object AppPlayerRepositories : PlayerRepositoryDependencies {
     override val settingsRepo get() = AppContainer.settingsRepo
     override val biliCookieRepo get() = AppContainer.biliCookieRepo
     override val neteaseCookieRepo get() = AppContainer.neteaseCookieRepo
+    override val qqMusicCookieRepo get() = AppContainer.qqMusicCookieRepo
     override val youtubeAuthRepo get() = AppContainer.youtubeAuthRepo
     override val biliClient get() = AppContainer.biliClient
     override val neteaseClient get() = AppContainer.neteaseClient
+    override val qqMusicClient get() = AppContainer.qqMusicClient
     override val youtubeMusicClient get() = AppContainer.youtubeMusicClient
     override val biliPlaybackRepository get() = AppContainer.biliPlaybackRepository
     override val youtubeMusicPlaybackRepository get() = AppContainer.youtubeMusicPlaybackRepository

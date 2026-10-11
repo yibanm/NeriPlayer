@@ -722,6 +722,7 @@ object PlayerManager {
     val biliRepo by lazy { PlayerDependencies.repositories.biliPlaybackRepository }
     val biliClient by lazy { PlayerDependencies.repositories.biliClient }
     val neteaseClient by lazy { PlayerDependencies.repositories.neteaseClient }
+    val qqMusicClient by lazy { PlayerDependencies.repositories.qqMusicClient }
     val youtubeMusicPlaybackRepository by lazy { PlayerDependencies.repositories.youtubeMusicPlaybackRepository }
     val youtubeMusicClient by lazy { PlayerDependencies.repositories.youtubeMusicClient }
 
@@ -1245,6 +1246,10 @@ object PlayerManager {
 
     fun isBiliTrack(song: SongItem): Boolean {
         return PlaybackMediaItemFactory.isBiliSource(song)
+    }
+
+    fun isQQMusicTrack(song: SongItem): Boolean {
+        return PlaybackMediaItemFactory.isQQMusicSource(song)
     }
     internal fun queueIndexOf(song: SongItem, playlist: List<SongItem> = currentPlaylist): Int {
         return playlist.indexOfFirst { it.sameIdentityAs(song) }

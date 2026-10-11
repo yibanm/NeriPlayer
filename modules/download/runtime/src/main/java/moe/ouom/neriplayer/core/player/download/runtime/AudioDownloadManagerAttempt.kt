@@ -392,6 +392,10 @@ internal suspend fun AudioDownloadManager.resolveDownloadSourceForAttempt(
                 song = song,
                 preferredQuality = downloadAudioQuality.biliQuality
             )
+            AudioDownloadSourceResolver.isQQMusicSource(song) -> resolveQQMusic(
+                song = song,
+                preferredQuality = downloadAudioQuality.neteaseQuality
+            )
             else -> resolveNetease(
                 songId = song.id,
                 preferredQuality = downloadAudioQuality.neteaseQuality

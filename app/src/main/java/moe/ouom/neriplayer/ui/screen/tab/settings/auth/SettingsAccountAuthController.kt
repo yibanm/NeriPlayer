@@ -35,6 +35,7 @@ internal class SettingsAuthDialogState(
     var showBiliSavedCookieDialog by mutableStateOf(false)
     var showYouTubeSheet by mutableStateOf(false)
     var showYouTubeSavedCookieDialog by mutableStateOf(false)
+    var showQqSheet by mutableStateOf(false)
     var loginSuccessTitleRes by mutableStateOf<Int?>(null)
 }
 
@@ -127,6 +128,13 @@ internal class SettingsAccountAuthController(
     fun openBiliSheet() = openBiliAtTab(0)
     fun openYouTubeSheet() = openYouTubeAtTab(0)
 
+    fun openQqSheet() {
+        onInlineMessageChange.value(null)
+        dialogs.showQqSheet = true
+    }
+
+    fun dismissQqSheet() { dialogs.showQqSheet = false }
+
     fun dismissNeteaseSheet() { dialogs.showNeteaseSheet = false }
     fun dismissBiliSheet() { dialogs.showBiliSheet = false }
     fun dismissYouTubeSheet() { dialogs.showYouTubeSheet = false }
@@ -150,6 +158,11 @@ internal class SettingsAccountAuthController(
         dismissYouTubeSavedCookieDialog()
         youtubeVm.clearAuth()
     }
+
+    fun logoutQq() {
+        dismissQqSheet()
+        moe.ouom.neriplayer.core.di.AppContainer.qqMusicCookieRepo.clear()
+    }
 }
 
 internal class SettingsAccountAuthActions(controller: SettingsAccountAuthController) {
@@ -158,7 +171,7 @@ internal class SettingsAccountAuthActions(controller: SettingsAccountAuthControl
             SettingsAccountPlatform.Netease -> openNeteaseSheet()
             SettingsAccountPlatform.Bilibili -> openBiliSheet()
             SettingsAccountPlatform.YouTube -> openYouTubeSheet()
-            SettingsAccountPlatform.QqMusic -> Unit
+            SettingsAccountPlatform.QqMusic -> openQqSheet()
         }
     }
 
@@ -167,7 +180,7 @@ internal class SettingsAccountAuthActions(controller: SettingsAccountAuthControl
             SettingsAccountPlatform.Netease -> openNeteaseSavedCookieDialog()
             SettingsAccountPlatform.Bilibili -> openBiliSavedCookieDialog()
             SettingsAccountPlatform.YouTube -> openYouTubeSavedCookieDialog()
-            SettingsAccountPlatform.QqMusic -> Unit
+            SettingsAccountPlatform.QqMusic -> openQqSheet()
         }
     }
 
@@ -190,6 +203,9 @@ internal class SettingsAccountAuthActions(controller: SettingsAccountAuthControl
     val openYouTubeSavedCookieDialog: () -> Unit = controller::openYouTubeSavedCookieDialog
     val openYouTubeSheet: () -> Unit = controller::openYouTubeSheet
     val logoutYouTube: () -> Unit = controller::logoutYouTube
+    val openQqSheet: () -> Unit = controller::openQqSheet
+    val dismissQqSheet: () -> Unit = controller::dismissQqSheet
+    val logoutQq: () -> Unit = controller::logoutQq
     val dismissLoginSuccess: () -> Unit = controller::dismissLoginSuccess
 }
 
@@ -240,6 +256,7 @@ internal fun SettingsAccountAuthDialogs(
     SettingsNeteaseAccountAuthDialogs(controller, inlineMessage, onInlineMessageChange)
     SettingsBiliAccountAuthDialogs(controller, inlineMessage, onInlineMessageChange)
     SettingsYouTubeAccountAuthDialogs(controller, inlineMessage, onInlineMessageChange)
+    SettingsQqAccountAuthDialogs(controller, inlineMessage, onInlineMessageChange)
     SettingsAccountLoginSuccessDialog(controller)
 }
 
@@ -321,4 +338,52 @@ private fun SettingsAccountLoginSuccessDialog(controller: SettingsAccountAuthCon
             onDismiss = controller.actions.dismissLoginSuccess
         )
     }
+}
+
+@Composable
+private fun SettingsQqAccountAuthDialogs(
+    controller: SettingsAccountAuthController,
+    inlineMessage: String?,
+    onInlineMessageChange: (String?) -> Unit
+) {
+    val dialogs = controller.dialogs
+    if (!dialogs.showQqSheet) return
+    SettingsCookieLoginSheet(
+        title = stringResource(CoreCommonR.string.settings_qq_music),
+        initialTab = 1,
+        inlineMsg = inlineMessage,
+        onInlineMsgChange = onInlineMessageChange,
+        onDismiss = controller.actions.dismissQqSheet,
+        browserTabLabel = stringResource(CoreCommonR.string.login_paste_cookie),
+        browserButtonLabel = stringResource(CoreCommonR.string.login_paste_cookie),
+        browserHintContent = {
+            androidx.compose.material3.Text(
+                stringResource(CoreCommonR.string.login_paste_cookie_hint)
+            )
+        },
+        cookieLabel = stringResource(CoreCommonR.string.login_paste_cookie_hint),
+        onBrowserLogin = { },
+        onSaveCookie = { rawCookie ->
+            if (rawCookie.isBlank()) {
+                onInlineMessageChange(null)
+            } else {
+                val ok = moe.ouom.neriplayer.core.di.AppContainer.qqMusicCookieRepo
+                    .saveCookies(parseQqCookieMap(rawCookie))
+                onInlineMessageChange(null)
+                if (ok) dialogs.showQqSheet = false
+            }
+        }
+    )
+}
+
+private fun parseQqCookieMap(raw: String): Map<String, String> {
+    val result = linkedMapOf<String, String>()
+    raw.split(';').forEach { pair ->
+        val key = pair.substringBefore('=', "").trim()
+        val value = pair.substringAfter('=', "").trim()
+        if (key.isNotEmpty() && value.isNotEmpty()) {
+            result[key] = value
+        }
+    }
+    return result
 }

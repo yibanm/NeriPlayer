@@ -41,6 +41,7 @@ import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshDeferredCompletion
 import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshRequestHandle
 import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshRequestSemantics
 import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshResolverSideEffects
+import moe.ouom.neriplayer.core.player.resolver.qqmusic.getQQMusicSongUrl
 import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshResultSideEffects
 import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshResultKind
 import moe.ouom.neriplayer.core.player.runtime.refresh.RefreshSideEffectGate
@@ -373,6 +374,11 @@ internal suspend fun PlayerManager.resolveSongUrl(
                 suppressError = suppressError,
                 sideEffects = resolverSideEffects,
                 playbackRequestTokenOverride = playbackRequestTokenOverride
+            )
+            isQQMusicTrack(song) -> getQQMusicSongUrl(
+                song = song,
+                suppressError = suppressError,
+                sideEffects = resolverSideEffects
             )
             else -> getNeteaseSongUrl(
                 song = song,

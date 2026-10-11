@@ -8,6 +8,7 @@ import moe.ouom.neriplayer.core.download.host.DownloadSourceServices
 internal object AndroidDownloadServices : DownloadSourceServices, DownloadLyricServices, DownloadCredentials {
     override val neteaseClient get() = AppContainer.neteaseClient
     override val biliClient get() = AppContainer.biliClient
+    override val qqMusicClient get() = AppContainer.qqMusicClient
     override val biliPlaybackRepository get() = AppContainer.biliPlaybackRepository
     override val youtubeMusicPlaybackRepository get() = AppContainer.youtubeMusicPlaybackRepository
     override val youtubeMusicDownloadPlaybackRepository get() = AppContainer.youtubeMusicDownloadPlaybackRepository

@@ -43,6 +43,31 @@ internal object AudioDownloadSourceResolver {
 
     internal fun isBiliSource(song: SongItem): Boolean = song.identity().album == "bilibili"
 
+    internal fun isQQMusicSource(song: SongItem): Boolean =
+        song.channelId == "qqmusic" || song.album.startsWith("QQMusic")
+
+    internal suspend fun resolveQQMusic(
+        song: SongItem,
+        preferredQuality: String
+    ): AudioDownloadManager.ResolvedDownloadSource? {
+        if (!isQQMusicSource(song)) {
+            return null
+        }
+        val mid = song.audioId?.takeIf { it.isNotBlank() }
+            ?: song.matchedSongId?.takeIf { it.isNotBlank() }
+            ?: return null
+        val url = DownloadHosts.sources.qqMusicClient
+            .getSongPlaybackUrl(mid, quality = preferredQuality)
+            ?.takeIf { it.isNotBlank() }
+            ?: return null
+        val httpsUrl = ensureHttps(url)
+        return AudioDownloadManager.ResolvedDownloadSource(
+            url = httpsUrl,
+            mimeType = guessMimeFromUrl(httpsUrl),
+            fileExtensionHint = extFromUrl(httpsUrl)
+        )
+    }
+
     internal sealed interface NeteaseDownloadLookup {
         data class Resolved(
             val source: AudioDownloadManager.ResolvedDownloadSource

@@ -20,6 +20,8 @@ import moe.ouom.neriplayer.data.model.ltw.track.ListenTogetherChannels
 
 internal object PlaybackMediaItemFactory {
     const val BILI_SOURCE_TAG = SongSourceTags.BILIBILI
+    const val QQ_MUSIC_SOURCE_TAG = SongSourceTags.QQ_MUSIC
+    const val QQ_MUSIC_CHANNEL_ID = "qqmusic"
 
     fun cacheKey(
         song: SongItem,
@@ -36,6 +38,7 @@ internal object PlaybackMediaItemFactory {
             return youtubeSongCacheKey(song, youtubeQualityOverride, youtubePreferM4a, youtubeQuality)
         }
         if (isBiliSource(song)) return biliSongCacheKey(song, biliQuality)
+        if (isQQMusicSource(song)) return qqMusicSongCacheKey(song)
         return neteaseCacheKey(song.id, neteaseQuality(), neteaseFallbackEnabled())
     }
 
@@ -54,6 +57,14 @@ internal object PlaybackMediaItemFactory {
 
     fun isBiliSource(song: SongItem): Boolean =
         song.channelId == ListenTogetherChannels.BILIBILI || song.album.startsWith(BILI_SOURCE_TAG)
+
+    fun isQQMusicSource(song: SongItem): Boolean =
+        song.channelId == QQ_MUSIC_CHANNEL_ID || song.album.startsWith(QQ_MUSIC_SOURCE_TAG)
+
+    internal fun qqMusicSongCacheKey(song: SongItem): String {
+        val mid = song.audioId ?: song.matchedSongId ?: song.id.toString()
+        return "qqmusic-$mid"
+    }
 
     private fun biliSongCacheKey(song: SongItem, quality: () -> String): String {
         val songId = song.audioId ?: song.id.toString()

@@ -49,6 +49,8 @@ import moe.ouom.neriplayer.platform.lyrics.repository.QQMusicLyricsRepository
 import moe.ouom.neriplayer.platform.lyrics.api.client.KugouLyricsClient
 import moe.ouom.neriplayer.platform.lyrics.api.client.LrcLibClient
 import moe.ouom.neriplayer.platform.netease.api.client.NeteaseClient
+import moe.ouom.neriplayer.platform.qqmusic.api.client.QQMusicClient
+import moe.ouom.neriplayer.platform.qqmusic.auth.QQMusicCookieRepository
 import moe.ouom.neriplayer.BuildConfig
 import moe.ouom.neriplayer.platform.search.api.client.CloudMusicSearchApi
 import moe.ouom.neriplayer.data.model.music.MusicPlatform
@@ -251,6 +253,7 @@ object AppContainer {
     val listenTogetherPreferences by lazy { ListenTogetherPreferences(application) }
     val neteaseCookieRepo by lazy { NeteaseCookieRepository(application) }
     val biliCookieRepo by lazy { BiliCookieRepository(application) }
+    val qqMusicCookieRepo by lazy { QQMusicCookieRepository(application) }
     val youtubeAuthRepo by lazy { YouTubeAuthRepository(application) }
     internal val youtubeAuthAutoRefreshManager by lazy {
         YouTubeAuthAutoRefreshManager(
@@ -372,6 +375,14 @@ object AppContainer {
     }
 
     val biliClient by lazy { BiliClient(biliCookieRepo, client = sharedOkHttpClient) }
+
+    val qqMusicClient by lazy {
+        QQMusicClient(sharedOkHttpClient, debugLogging = BuildConfig.DEBUG).also { client ->
+            qqMusicCookieRepo.withCurrentCookies { cookies ->
+                client.setPersistedCookies(cookies)
+            }
+        }
+    }
 
     private val commentCache = CommentMemoryCache()
     private val neteaseComments = NeteaseCommentRepository(commentCache) { neteaseClient }
@@ -600,6 +611,12 @@ object AppContainer {
                 neteaseCookieRepo.withCurrentCookiesIfMatches(cookies) { currentCookies ->
                     neteaseClient.setPersistedCookies(currentCookies)
                 }
+            }
+            .launchIn(scope)
+
+        qqMusicCookieRepo.cookieFlow
+            .onEach { cookies ->
+                qqMusicClient.setPersistedCookies(cookies)
             }
             .launchIn(scope)
     }

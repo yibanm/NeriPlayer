@@ -111,7 +111,7 @@ private fun SettingsAccountCard(
     suppressInactiveNavigationSurface: Boolean,
     fallbackColor: Color?
 ) {
-    val supported = account.platform != SettingsAccountPlatform.QqMusic
+    val supported = true
     val key = account.platform.key
     val cardShape = RoundedCornerShape(24.dp)
     val interactionModifier = if (supported) {
@@ -171,7 +171,7 @@ private fun SettingsAccountIdentity(
     modifier: Modifier = Modifier
 ) {
     val platformName = stringResource(account.platform.titleRes)
-    val supported = account.platform != SettingsAccountPlatform.QqMusic
+    val supported = true
     Row(
         modifier = modifier.fillMaxWidth().testTag("settingsAccountIdentity:${account.platform.key}"),
         verticalAlignment = Alignment.CenterVertically,

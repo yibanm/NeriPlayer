@@ -2,6 +2,8 @@ package moe.ouom.neriplayer.core.player.host
 
 import moe.ouom.neriplayer.platform.bilibili.api.client.BiliClient
 import moe.ouom.neriplayer.platform.netease.api.client.NeteaseClient
+import moe.ouom.neriplayer.platform.qqmusic.api.client.QQMusicClient
+import moe.ouom.neriplayer.platform.qqmusic.auth.QQMusicCookieRepository
 import moe.ouom.neriplayer.platform.search.api.client.CloudMusicSearchApi
 import moe.ouom.neriplayer.platform.youtube.api.client.YouTubeMusicClient
 import moe.ouom.neriplayer.platform.bilibili.auth.BiliCookieRepository
@@ -27,9 +29,11 @@ interface PlayerRepositoryDependencies {
     val settingsRepo: SettingsRepository
     val biliCookieRepo: BiliCookieRepository
     val neteaseCookieRepo: NeteaseCookieRepository
+    val qqMusicCookieRepo: QQMusicCookieRepository
     val youtubeAuthRepo: YouTubeAuthRepository
     val biliClient: BiliClient
     val neteaseClient: NeteaseClient
+    val qqMusicClient: QQMusicClient
     val youtubeMusicClient: YouTubeMusicClient
     val biliPlaybackRepository: BiliPlaybackRepository
     val youtubeMusicPlaybackRepository: YouTubeMusicPlaybackRepository

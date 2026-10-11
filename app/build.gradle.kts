@@ -84,7 +84,7 @@ android {
     println("buildUUID: $buildUUID")
 
     defaultConfig {
-        applicationId = "moe.ouom.neriplayer"
+        applicationId = "com.kobe.neriplayer"
         val inviteScheme = "neriplayer"
         manifestPlaceholders["listenTogetherInviteScheme"] = inviteScheme
         buildConfigField("String", "LISTEN_TOGETHER_INVITE_SCHEME", "\"$inviteScheme\"")

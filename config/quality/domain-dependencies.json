@@ -3432,5 +3432,68 @@
     ],
     "bridges": {},
     "descriptor_only": []
+  },
+  {
+    "name": "platform-qqmusic-client",
+    "package": "moe.ouom.neriplayer.platform.qqmusic.api.",
+    "allowed_classes": [
+      "java.*",
+      "javax.*",
+      "android.*",
+      "androidx.*",
+      "kotlin.*",
+      "kotlinx.*",
+      "okhttp3.*",
+      "okio.*",
+      "org.json.*",
+      "moe.ouom.neriplayer.common.*",
+      "moe.ouom.neriplayer.network.*",
+      "moe.ouom.neriplayer.data.model.*",
+      "moe.ouom.neriplayer.platform.qqmusic.*"
+    ],
+    "bridges": {},
+    "descriptor_only": []
+  },
+  {
+    "name": "platform-qqmusic-auth",
+    "package": "moe.ouom.neriplayer.platform.qqmusic.auth.",
+    "allowed_classes": [
+      "java.*",
+      "javax.*",
+      "android.*",
+      "androidx.*",
+      "kotlin.*",
+      "kotlinx.*",
+      "okhttp3.*",
+      "okio.*",
+      "org.json.*",
+      "moe.ouom.neriplayer.common.*",
+      "moe.ouom.neriplayer.network.*",
+      "moe.ouom.neriplayer.data.model.*",
+      "moe.ouom.neriplayer.platform.qqmusic.*"
+    ],
+    "bridges": {},
+    "descriptor_only": []
+  },
+  {
+    "name": "platform-qqmusic-mapping",
+    "package": "moe.ouom.neriplayer.platform.qqmusic.mapping.",
+    "allowed_classes": [
+      "java.*",
+      "javax.*",
+      "android.*",
+      "androidx.*",
+      "kotlin.*",
+      "kotlinx.*",
+      "okhttp3.*",
+      "okio.*",
+      "org.json.*",
+      "moe.ouom.neriplayer.common.*",
+      "moe.ouom.neriplayer.network.*",
+      "moe.ouom.neriplayer.data.model.*",
+      "moe.ouom.neriplayer.platform.qqmusic.*"
+    ],
+    "bridges": {},
+    "descriptor_only": []
   }
 ]

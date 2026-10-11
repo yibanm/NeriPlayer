@@ -1726,6 +1726,15 @@ object AudioDownloadManager {
         preferredQuality = preferredQuality
     )
 
+    // 解析 QQ 音乐音频直链
+    internal suspend fun resolveQQMusic(
+        song: SongItem,
+        preferredQuality: String
+    ): ResolvedDownloadSource? = AudioDownloadSourceResolver.resolveQQMusic(
+        song = song,
+        preferredQuality = preferredQuality
+    )
+
     internal fun ensureHttps(url: String): String = AudioDownloadSourceResolver.ensureHttps(url)
 
     internal fun mimeToExt(mime: String): String? = AudioDownloadSourceResolver.mimeToExt(mime)
